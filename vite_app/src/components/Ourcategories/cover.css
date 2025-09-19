@@ -11,38 +11,37 @@
 
 /* Hero Section */
 .co-section {
-    position: relative;
-    padding: 110px 5% 160px;
-    background-color: #000;
-    height: 45vh;
-    
+  position: relative;
+  padding: 120px 1% 160px;
+  background-color: #000;
+  margin-top: 3.7rem;
+  height: 45vh;
 }
 
 .co-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    text-align: center; /* Center align content */
+  max-width: 1200px;
+  margin-top: -8rem;
+  margin-left: 9.5rem;
 }
 
 .co-content h2 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 2rem;
-    line-height: 1.2;
-    margin-top: -7.5vh;
-    margin-left: -48rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  line-height: 1.2;
+  margin-top: 2vh;
+  font-family: Bebas Neue, sans-serif;
 }
 
 .co-content .p2 {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-    color: white;
-    /* CRITICAL FIX: Removed min-width and used max-width */
-    min-width: 800px;
-    margin: 1rem auto 0; /* Centering helper */
-    margin-left: 0rem;
-    width: 500px;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  margin-top: 2vh;
+  width: 80vw;
+  margin-left: .5vw;
+  color: white;
+  max-width: 800px;
 }
 
 .wave-divider {
@@ -215,29 +214,31 @@
     margin-top: 5rem;
 }
     /* Hero Section Adjustments */
-    .co-section {
-        padding: 80px 5% 100px; /* Reduced padding */
-        height: 45vh; /* Allow height to fit content */
-    }
+   .co-section {
+    padding: 80px 5% 100px;
+    height: 40vh;
+    text-align: center;
 
-    .co-content h2 {
-        font-size: 2.2rem;
-        margin-left: 0; /* Reset negative margin */
-        margin-top: -2.5rem;
-    }
+  }
 
-    .co-content .p2 {
-        font-size: 1rem;
-        /* CRITICAL FIX: Ensure paragraph is not wider than the screen */
-        width: 90vw;
-        min-width: 0; /* Reset min-width */
-    }
+  .co-content {
+    margin-left: 0;
+    margin-top: -6.5rem;
+  }
 
-    /* Gallery Section Adjustments */
-    .co-gallery-section h2 {
-        font-size: 2rem;
-    }
+  .co-content h2 {
+    font-size: 2rem;
+    
+  }
 
+  .co-content .p2 {
+    font-size: 1rem;
+    width: 90vw;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+    
+  }
     .co-tattoo-grid {
         /* This allows for a 2-column layout on most mobile phones */
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
