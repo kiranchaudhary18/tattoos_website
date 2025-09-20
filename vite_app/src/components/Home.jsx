@@ -218,9 +218,11 @@ const Home = () => {
     }
   };
 
+
+
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
-
+  console.log("📌 handleReviewSubmit called", reviewFormData);
     const formData = new FormData();
     formData.append('name', reviewFormData.name);
     formData.append('rating', reviewFormData.rating);
@@ -230,7 +232,7 @@ const Home = () => {
     }
 
     try {
-      const response = await fetch('https://tattoos-website-r5za.onrender.com/api/reviews', {
+      const response = await fetch('http://localhost:3000/api/reviews', {
         method: 'POST',
         body: formData
       });
