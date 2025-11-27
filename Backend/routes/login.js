@@ -24,15 +24,64 @@
 
 
 
+// const express = require("express");
+// const router = express.Router();
+// const Login = require("../../Backend/models/Login");
+
+// // 🟢 POST: Create a new user (without password)
+// router.post("/", async (req, res) => {
+//   try {
+//     const { name, email, mobile, designPreference, appointment } = req.body;
+
+//     const newUser = new Login({
+//       name,
+//       email,
+//       mobile,
+//       designPreference,
+//       appointment,
+//     });
+
+//     const savedUser = await newUser.save();
+//     res.status(201).json({ message: "User created successfully", user: savedUser });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
+
+// // 🟢 GET: Get all users (optional)
+// router.get("/", async (req, res) => {
+//   try {
+//     const users = await Login.find();
+//     res.status(200).json(users);
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
+
+// module.exports = router;
+
+
+
+
+
+
+
+
+
+
+
+
 const express = require("express");
 const router = express.Router();
 const Login = require("../../Backend/models/Login");
+const sendEmail = require("../utils/sendEmail"); // <-- Background email function (optional)
 
-// 🟢 POST: Create a new user (without password)
+// 🟢 POST: Create a new user fast
 router.post("/", async (req, res) => {
   try {
     const { name, email, mobile, designPreference, appointment } = req.body;
 
+    // Save user
     const newUser = new Login({
       name,
       email,
@@ -42,13 +91,31 @@ router.post("/", async (req, res) => {
     });
 
     const savedUser = await newUser.save();
-    res.status(201).json({ message: "User created successfully", user: savedUser });
+
+    // 🚀 Instant response -> frontend will submit fast
+    res.status(201).json({
+      saved: true,
+      user: savedUser,
+      message: "User created successfully",
+    });
+
+    // 📨 Send email in background (NO WAITING)
+    sendEmail({
+      to: email,
+      subject: "Tattoo Studio Appointment",
+      text: `Hello ${name}, we have received your request.`,
+    }).catch((err) => {
+      console.log("Email sending failed:", err.message);
+    });
+
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: err.message });
   }
 });
 
-// 🟢 GET: Get all users (optional)
+
+// 🟢 GET Users
 router.get("/", async (req, res) => {
   try {
     const users = await Login.find();

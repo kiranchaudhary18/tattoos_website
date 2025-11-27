@@ -65,9 +65,9 @@ router.post("/", upload.single("image"), async (req, res) => {
 
         // Send email to admin
         const mailOptions = {
-            from: "ironcore.gym.1@gmail.com",
-            to: "ironcore.gym.1@gmail.com",
-            subject: "New Review Submission",
+            from: "mywebsite.cg22@gmail.com",
+            to: "mywebsite.cg22@gmail.com",
+            subject: "New Review Submissi.on",
             html: `
                 <h2>New Review Submission</h2>
                 <p><strong>Name:</strong> ${name}</p>
@@ -75,7 +75,7 @@ router.post("/", upload.single("image"), async (req, res) => {
                 <p><strong>Message:</strong> ${message}</p>
                 <p><strong>Review ID:</strong> ${result._id}</p>
                 <p>
-                  <a href="http://localhost:3006/reviews/approve/${result._id}">Click here to approve</a>
+                  <a href="http://localhost:3000/reviews/approve/${result._id}">Click here to approve</a>
                 </p>
             `
         };
