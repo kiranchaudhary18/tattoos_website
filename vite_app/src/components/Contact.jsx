@@ -29,7 +29,7 @@ const PaymentForm = ({ onClose, amount }) => {
     setShowMessage(false);
 
     try {
-      const response = await fetch("http://localhost:3000/api/login");
+      const response = await fetch("https://tattoos-website-22.onrender.com/api/login");
       if (!response.ok) throw new Error(`Error ${response.status}: ${await response.text()}`);
       const users = await response.json();
 
@@ -41,7 +41,7 @@ const PaymentForm = ({ onClose, amount }) => {
         return;
       }
 
-      const submitResponse = await fetch("http://localhost:3000/api/login", {
+      const submitResponse = await fetch("https://tattoos-website-22.onrender.com/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -192,7 +192,7 @@ const Contact = () => {
 
       console.log("Sending data:", requestData);
 
-      const response = await fetch("http://localhost:3000/api/login", {
+      const response = await fetch("https://tattoos-website-22.onrender.com/api/login", {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
