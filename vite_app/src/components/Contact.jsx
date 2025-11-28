@@ -214,7 +214,7 @@ const Contact = () => {
       if (!response.ok) {
         // If data was saved but email failed, show a different message
         if (response.status === 200 && responseData.saved && !responseData.emailSent) {
-          setMessage("✅ Your message was received! We'll get back to you soon. (Note: Email notification failed)");
+          setMessage("✅ Your message was received! We'll get back to you soon.");
           setShowMessage(true);
           return; // Don't throw error, as data was saved
         }
@@ -224,7 +224,7 @@ const Contact = () => {
       // Show success message
       const successMessage = responseData.emailSent 
         ? "✅ Thank you for contacting us! We've received your message and sent a confirmation email."
-        : "✅ Thank you for contacting us! We've received your message. (Email notification might be delayed)";
+        : "✅ Thank you for contacting us! We've received your message. ";
       
       setMessage(successMessage);
       setShowMessage(true);
