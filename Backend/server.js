@@ -2,6 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config(); // Load .env variables
+const sendEmail = require("./utils/sendEmail");
+
 
 // Import routes
 const stipplingRoutes = require("./routes/stippling");

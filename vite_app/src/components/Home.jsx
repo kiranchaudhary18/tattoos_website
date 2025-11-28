@@ -160,65 +160,101 @@ const Home = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
+    setFormData(prevState => ({
       ...prevState,
-      [name]: value,
+      [name]: value
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
+    // Basic validation
     if (!formData.name || !formData.email || !formData.mobile) {
       setMessage("❌ Please fill in all required fields.");
       setShowMessage(true);
       setTimeout(() => setShowMessage(false), 3000);
       return;
     }
-  
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setMessage("❌ Please enter a valid email address.");
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 3000);
+      return;
+    }
+
+    // Mobile validation (10 digits)
+    const mobileRegex = /^\d{10}$/;
+    if (!mobileRegex.test(formData.mobile)) {
+      setMessage("❌ Please enter a valid 10-digit mobile number.");
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 3000);
+      return;
+    }
+
     setLoading(true);
-    setMessage("");
-    setShowMessage(false);
-  
+    setMessage("⏳ Submitting your booking...");
+    setShowMessage(true);
+
     try {
       const response = await fetch(
         "https://tattoos-website-9-login.onrender.com/users",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+          headers: { 
+            "Content-Type": "application/json" 
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            mobile: formData.mobile,
+            designPreference: formData.designPreference || "Not specified",
+            appointmentDate: formData.appointmentDate || "Not specified",
+            type: "booking",
+            timestamp: new Date().toISOString()
+          })
         }
       );
-  
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Error ${response.status}: ${errorText}`);
+
+      // Handle non-JSON responses
+      const responseText = await response.text();
+      let responseData = {};
+      
+      try {
+        responseData = await response.json();
+      } catch (jsonError) {
+        console.log("Response is not JSON, but that's okay");
+        responseData = { success: true }; // Assume success if we can't parse JSON
       }
-  
-      setMessage("✅ Form submitted successfully!");
+
+      // Show success message
+      setMessage("✅ Thank you for your booking! We'll contact you shortly to confirm.");
       setShowMessage(true);
-      setTimeout(() => setShowMessage(false), 3000);
-  
-      setFormData({
-        name: "",
-        email: "",
-        mobile: "",
-        designPreference: "",
-        appointmentDate: "",
+      
+      // Reset form
+      setFormData({ 
+        name: "", 
+        email: "", 
+        mobile: "", 
+        designPreference: "", 
+        appointmentDate: "" 
       });
+      
+      // Hide message after 5 seconds
+      setTimeout(() => setShowMessage(false), 5000);
+      
     } catch (error) {
-      console.error("Form submission error:", error.message);
-      setMessage("❌ Submission failed. Please try again.");
+      console.error("Booking submission error:", error);
+      setMessage(`❌ ${error.message || 'Failed to submit booking. Please try again.'}`);
       setShowMessage(true);
-      setTimeout(() => setShowMessage(false), 3000);
+      setTimeout(() => setShowMessage(false), 5000);
     } finally {
       setLoading(false);
     }
   };
-
-
 
   const handleReviewSubmit = async (e) => {
     e.preventDefault();

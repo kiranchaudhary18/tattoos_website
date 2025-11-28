@@ -16,57 +16,57 @@ const PaymentForm = ({ onClose, amount }) => {
   const [processing, setProcessing] = useState(false);
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  if (!formData.name || !formData.email || !formData.mobile) {
-    setMessage("❌ Please fill in all required fields.");
-    setShowMessage(true);
-    setTimeout(() => setShowMessage(false), 3000);
-    return;
-  }
-
-  setLoading(true);
-  setMessage("");
-  setShowMessage(false);
-
-  try {
-    const response = await fetch("https://tattoos-website-9-login.onrender.com/users");
-    if (!response.ok) throw new Error(`Error ${response.status}: ${await response.text()}`);
-    const users = await response.json();
-
-    if (users.find(user => user.email === formData.email)) {
-      setMessage("❌ This email is already in use. Please use a different email.");
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.mobile) {
+      setMessage("❌ Please fill in all required fields.");
       setShowMessage(true);
       setTimeout(() => setShowMessage(false), 3000);
-      setLoading(false);
       return;
     }
 
-    const submitResponse = await fetch("https://tattoos-website-9-login.onrender.com/users", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+    setLoading(true);
+    setMessage("");
+    setShowMessage(false);
 
-    if (!submitResponse.ok) throw new Error(`Error ${submitResponse.status}: ${await submitResponse.text()}`);
+    try {
+      const response = await fetch("http://localhost:3000/api/login");
+      if (!response.ok) throw new Error(`Error ${response.status}: ${await response.text()}`);
+      const users = await response.json();
 
-    // ✅ Success message popup
-    setMessage("✅ Form submitted successfully!");
-    setShowMessage(true);
+      if (users.find(user => user.email === formData.email)) {
+        setMessage("❌ This email is already in use. Please use a different email.");
+        setShowMessage(true);
+        setTimeout(() => setShowMessage(false), 3000);
+        setLoading(false);
+        return;
+      }
 
-    // 2 second ke baad page refresh
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
+      const submitResponse = await fetch("http://localhost:3000/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-  } catch (error) {
-    console.error("Form submission error:", error.message);
-    setMessage("❌ Submission failed. Please try again.");
-    setShowMessage(true);
-    setTimeout(() => setShowMessage(false), 3000);
-  } finally {
-    setLoading(false);
-  }
-};
+      if (!submitResponse.ok) throw new Error(`Error ${submitResponse.status}: ${await submitResponse.text()}`);
+
+      // ✅ Success message popup
+      setMessage("✅ Form submitted successfully!");
+      setShowMessage(true);
+
+      // 2 second ke baad page refresh
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+
+    } catch (error) {
+      console.error("Form submission error:", error.message);
+      setMessage("❌ Submission failed. Please try again.");
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 3000);
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
   return (
@@ -139,6 +139,8 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Basic validation
     if (!formData.name || !formData.email || !formData.mobile) {
       setMessage("❌ Please fill in all required fields.");
       setShowMessage(true);
@@ -146,38 +148,105 @@ const Contact = () => {
       return;
     }
 
+    // Check if at least one additional field is provided
+    if (!formData.designPreference && !formData.appointmentDate) {
+      setMessage("❌ Please select a design preference or appointment date.");
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 5000);
+      return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setMessage("❌ Please enter a valid email address.");
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 3000);
+      return;
+    }
+
+    // Mobile validation (10 digits)
+    const mobileRegex = /^\d{10}$/;
+    if (!mobileRegex.test(formData.mobile)) {
+      setMessage("❌ Please enter a valid 10-digit mobile number.");
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 3000);
+      return;
+    }
+
     setLoading(true);
-    setMessage("");
-    setShowMessage(false);
+    setMessage("⏳ Submitting your message...");
+    setShowMessage(true);
 
     try {
-      const response = await fetch("https://tattoos-website-9-login.onrender.com/users");
-      if (!response.ok) throw new Error(`Error ${response.status}: ${await response.text()}`);
-      const users = await response.json();
-      if (users.find(user => user.email === formData.email)) {
-        setMessage("❌ This email is already in use. Please use a different email.");
-        setShowMessage(true);
-        setTimeout(() => setShowMessage(false), 3000);
-        setLoading(false);
-        return;
-      }
+      // Prepare the request data with all required fields
+      const requestData = {
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        mobile: formData.mobile.trim(),
+        message: (formData.message || "No message provided").trim(),
+        type: "contact",
+        designPreference: formData.designPreference || "Not specified",
+        appointmentDate: formData.appointmentDate || "Not specified"
+      };
 
-      const submitResponse = await fetch("https://tattoos-website-9-login.onrender.com/users", {
+      console.log("Sending data:", requestData);
+
+      const response = await fetch("http://localhost:3000/api/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        headers: { 
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(requestData)
       });
 
-      if (!submitResponse.ok) throw new Error(`Error ${submitResponse.status}: ${await submitResponse.text()}`);
-      setMessage("✅ Form submitted successfully!");
+      const responseText = await response.text();
+      console.log("Server response:", responseText);
+      
+      let responseData = {};
+      try {
+        responseData = responseText ? JSON.parse(responseText) : {};
+      } catch (e) {
+        console.log("Could not parse response as JSON");
+      }
+
+      if (!response.ok) {
+        // If data was saved but email failed, show a different message
+        if (response.status === 200 && responseData.saved && !responseData.emailSent) {
+          setMessage("✅ Your message was received! We'll get back to you soon. (Note: Email notification failed)");
+          setShowMessage(true);
+          return; // Don't throw error, as data was saved
+        }
+        throw new Error(responseData.error || `Server error: ${response.status}`);
+      }
+
+      // Show success message
+      const successMessage = responseData.emailSent 
+        ? "✅ Thank you for contacting us! We've received your message and sent a confirmation email."
+        : "✅ Thank you for contacting us! We've received your message. (Email notification might be delayed)";
+      
+      setMessage(successMessage);
       setShowMessage(true);
-      setTimeout(() => setShowMessage(false), 3000);
-      setFormData({ name: "", email: "", mobile: "", designPreference: "", appointmentDate: "" });
+      
+      // Reset form
+      setFormData({ 
+        name: "", 
+        email: "", 
+        mobile: "", 
+        message: "",
+        designPreference: "", 
+        appointmentDate: "" 
+      });
+      
+      // Hide message after 5 seconds
+      setTimeout(() => setShowMessage(false), 5000);
+      
     } catch (error) {
-      console.error("Form submission error:", error.message);
-      setMessage("❌ Submission failed. Please try again.");
+      console.error("Form submission error:", error);
+      setMessage(`❌ ${error.message || 'Failed to submit form. Please try again later.'}`);
       setShowMessage(true);
-      setTimeout(() => setShowMessage(false), 3000);
+      setTimeout(() => setShowMessage(false), 5000);
     } finally {
       setLoading(false);
     }

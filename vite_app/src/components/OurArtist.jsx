@@ -130,7 +130,7 @@ const OurArtist = () => {
             />
             <h2 className='tattoo-artist-eric'>Eric D`suza</h2>
             <div className='tattoo-artist-pro-but'>
-              <Link to="/portfolio/eric" className='tattoo-artist-pro'>PORTFOLIO <span className="arrow-icon">→</span></Link>
+              <Link to="/Ourartist/eric" className='tattoo-artist-pro'>PORTFOLIO <span className="arrow-icon">→</span></Link>
             </div>
           </div>
 
@@ -142,7 +142,7 @@ const OurArtist = () => {
             />
             <h2 className='tattoo-artist-parth-text'>PARTH SAVANI</h2>
             <div className='tattoo-artist-pro-but1'>
-              <Link to="/portfolio/parth" className='tattoo-artist-pro1'>PORTFOLIO <span className="arrow-icon">→</span></Link>
+              <Link to="/Ourartist/parth" className='tattoo-artist-pro1'>PORTFOLIO <span className="arrow-icon">→</span></Link>
             </div>
           </div>
         </div>
@@ -157,7 +157,7 @@ const OurArtist = () => {
           
         </div>
         <div className='tattoo-artist-pro-but2'>
-            <Link to="/portfolio/poufa" className='tattoo-artist-pro'>PORTFOLIO <span className="arrow-icon">→</span></Link>
+            <Link to="/Ourartist/Poufa" className='tattoo-artist-pro'>PORTFOLIO <span className="arrow-icon">→</span></Link>
           </div>
       </div>
     </>
