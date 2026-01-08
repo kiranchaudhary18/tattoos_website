@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Link, useLocation } from "react-router-dom";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import ProfileDropdown from "./components/ProfileDropdown";
@@ -22,6 +22,17 @@ import Contact from "./components/Contact";
 import Footer from "./footer";
 
 import "./App.css"; // ✅ CSS file
+
+// ScrollToTop Component
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -52,6 +63,7 @@ function App() {
 
   return (
     <Router>
+      <ScrollToTop />
       <div>
         {/* ✅ Overlay */}
         {isMenuOpen && (
